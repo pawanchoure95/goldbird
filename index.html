@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<!-- saved from url=(0069)https://agent-6973abc4d5d97a35efcbbf8d-%2Dgoldbird.netlify.app/#about -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Goldbird Online | Elite Marketplace</title>
+<link href="./Goldbird Online _ Elite Marketplace_files/css2" rel="stylesheet">
+<style>
+:root {
+--gold: #D4AF37;
+--gold-light: #F9E5AF;
+--dark-bg: #050505;
+--card-bg: #121212;
+--maroon: #2D0A0A;
+--silver: #C0C0C0;
+--accent-hover: rgba(212,175,55,0.2);
+/* Apple Font Stack */
+--apple-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+/* Apple style font integration */
+body{font-family: var(--apple-font); background:var(--dark-bg);color:#fff;overflow-x:hidden;line-height:1.6; -webkit-font-smoothing: antialiased;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-weight:bold;transition:0.2s; border-radius: 12px;}
+
+/* --- LIVE PRICE TICKER --- */
+.price-ticker {
+    background: #000;
+    color: var(--gold);
+    padding: 8px 0;
+    font-size: 13px;
+    font-weight: 600;
+    border-bottom: 1px solid #222;
+    position: fixed;
+    top: 38px; /* Notice bar ke niche */
+    width: 100%;
+    z-index: 1500;
+    overflow: hidden;
+}
+.ticker-content {
+    display: inline-block;
+    white-space: nowrap;
+    animation: ticker 25s linear infinite;
+}
+@keyframes ticker {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+/* --- TOP NOTICE BAR --- */
+.launch-notice {
+    background: linear-gradient(90deg, #1a1a1a, var(--maroon), #1a1a1a);
+    color: var(--gold-light);
+    padding: 12px 0;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--gold);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 2000;
+    overflow: hidden;
+}
+.notice-track {display: flex; width: 100%;}
+.notice-content {display: inline-block; white-space: nowrap; padding-left: 100%; animation: noticeScroll 22s linear infinite;}
+.notice-content span {padding-right: 40px;}
+@keyframes noticeScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+/* --- NAV --- */
+nav{position:fixed;top:75px;width:100%;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.95);z-index:1000;border-bottom:1px solid rgba(212,175,55,0.3); backdrop-filter: blur(10px);}
+.logo-text{font-family:'Playfair Display',serif;font-size:26px;color:var(--gold);letter-spacing:3px;font-weight:bold;}
+.nav-links a{margin-left:20px;font-size:12px;text-transform:uppercase;color:#fff;}
+.nav-icons{display:flex;gap:10px;align-items:center;}
+.icon-btn{background:none;border:none;color:#fff;padding:8px 12px;text-transform:uppercase;border-radius:5px;transition:0.3s;}
+.icon-btn.gold{background:var(--gold);color:#000;}
+.icon-btn:hover{opacity:0.85;}
+
+/* --- HERO --- */
+.hero{height:80vh;display:flex;align-items:center;padding-left:8%;background:linear-gradient(to right,rgba(0,0,0,0.8) 30%,rgba(0,0,0,0) 100%),url('https://images.unsplash.com/photo-1599591452652-32695509d3da?auto=format&fit=crop&q=80&w=1600');background-size:cover;background-position:center;border-bottom:1px solid var(--gold); margin-top: 110px;}
+.hero-content h1{font-family:'Playfair Display',serif;font-size:clamp(40px,6vw,75px);color:var(--gold);margin-bottom:20px;}
+.hero-content p{max-width:600px;margin-bottom:30px;font-size:16px;color:#ddd;}
+.hero-content button{border-radius:20px;font-weight:600;letter-spacing:0.5px;font-size:14px;padding:12px 28px;border:none;margin-right:10px;}
+.hero-content button.gold{background:var(--gold);color:#000;}
+.hero-content button:hover{transform:translateY(-2px);box-shadow:0 5px 15px var(--accent-hover);}
+.hero-content button.outline{border:1px solid var(--gold);color:var(--gold);background:none;}
+
+/* --- MARKETPLACE --- */
+.section{padding:100px 8%;text-align:center;}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;}
+.product-card{background:var(--card-bg);border:1px solid #333;overflow:hidden;text-align:left;position:relative;border-radius:12px; transition: 0.4s;}
+.product-card:hover {border-color: var(--gold); transform: translateY(-5px);}
+.product-card img{width:100%;height:250px;object-fit:cover;transition:0.3s;}
+.product-card:hover img{transform:scale(1.05);}
+.product-body{padding:15px;}
+.product-body h3{font-size:16px;margin-bottom:10px;}
+.price{color:var(--gold);font-weight:bold;font-size:18px;margin-bottom:10px;}
+.card-btn{width:100%;padding:10px;background:var(--gold);border:none;color:#000;margin-bottom:5px;border-radius:8px;font-size:14px;font-weight:500;}
+.card-btn:hover{background:#c9a52f;color:#000;}
+.card-btn.secondary{background:#111;color:var(--gold);border:1px solid #333;}
+.card-btn.secondary:hover{border-color:var(--gold);}
+
+/* --- SEARCH/FILTER --- */
+.search-flex{display:flex;gap:10px;margin-bottom:30px;flex-wrap:wrap;justify-content:center;}
+.search-bar{flex:2;padding:12px;border-radius:30px;border:2px solid var(--gold);outline:none;background:#111;color:#fff; font-family: var(--apple-font);}
+.filter-select{flex:1;padding:12px;border-radius:30px;border:2px solid var(--gold);background:#fff;color:#000;cursor:pointer;}
+
+/* --- WISHLIST --- */
+.wishlist-panel{max-width:1000px;margin:20px auto 0;background:#0e0e0e;border:1px solid #222;border-radius:14px;padding:20px;text-align:left;}
+.wishlist-header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;}
+.wishlist-header h3{font-size:16px;color:var(--gold);}
+.wishlist-list{display:grid;gap:10px;}
+.wishlist-item{display:flex;justify-content:space-between;align-items:center;background:#121212;border:1px solid #222;border-radius:10px;padding:10px 14px;font-size:13px;}
+.wishlist-item span{color:#ddd;}
+.wishlist-empty{color:#777;font-size:12px;}
+
+/* --- SELL --- */
+.sell-box{max-width:600px;margin:0 auto;background:rgba(0,0,0,0.3);padding:30px;border:1px solid var(--gold);border-radius:12px;}
+.file-label{display:block;background:#333;color:var(--gold-light);padding:12px;margin-bottom:15px;text-align:center;border:1px dashed var(--gold);cursor:pointer;font-size:12px;border-radius:8px;}
+
+/* --- SELL INPUTS FIX --- */
+.sell-box input[type="text"], 
+.sell-box input[type="number"], 
+.sell-box select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #111;
+    color: #fff;
+    font-family: inherit;
+    outline: none;
+}
+.sell-box input:focus, .sell-box select:focus {
+    border-color: var(--gold);
+}
+#itemPhoto { display: none; }
+
+/* --- ELITE PROFILE SECTION --- */
+.profile-elite-section {background: linear-gradient(145deg, #000, #1a1a1a); border: 2px solid var(--gold); border-radius: 20px; padding: 40px; margin: 40px 8%; text-align: left; position: relative; overflow: hidden;}
+.profile-elite-section::after {content: 'ELITE'; position: absolute; right: -20px; bottom: -10px; font-size: 100px; color: rgba(212,175,55,0.05); font-weight: 900;}
+.elite-badge {background: var(--gold); color: #000; padding: 5px 15px; border-radius: 50px; font-weight: bold; font-size: 12px; display: inline-block; margin-bottom: 15px;}
+
+/* --- FRANCHISE SECTION --- */
+.franchise-grid {display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 30px;}
+.franchise-card {background: #111; border: 1px solid #333; border-radius: 20px; padding: 30px; transition: 0.3s;}
+.franchise-card:hover {border-color: var(--gold); background: #161616;}
+.franchise-price {font-size: 28px; color: var(--gold); margin: 15px 0;}
+
+/* --- MODALS --- */
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);justify-content:center;align-items:center;z-index:2000;}
+.modal-content{background:var(--card-bg);padding:40px;width:90%;max-width:400px;position:relative;border-radius:12px;}
+.close-btn{position:absolute;top:10px;right:15px;color:var(--gold);font-size:25px;cursor:pointer;}
+
+/* --- INFO SECTIONS --- */
+.info-section{background:#0a0a0a;color:#ccc;text-align:left;padding:50px 8%;font-family: var(--apple-font);border-radius:8px;margin-bottom:30px;}
+.info-section h2{color:var(--gold);font-family:'Playfair Display';margin-bottom:15px;}
+
+/* --- FOOTER --- */
+footer{padding:60px 8%;background:#000;border-top:1px solid #222;}
+.footer-links a{display:block;color:#888;text-decoration:none;margin-bottom:10px;font-size:13px;}
+.footer-links a:hover{color:var(--gold);}
+footer div{margin-top:20px;color:#888;font-size:12px;}
+</style>
+</head>
+<body>
+
+<div class="launch-notice">
+    <div class="notice-track">
+        <div class="notice-content">
+            <span>USER TRIAL PERIOD ACTIVE</span>
+            <span>OFFICIAL INTERNATIONAL LAUNCHING SOON</span>
+            <span>GOLDBIRD: THE FUTURE OF PURE ASSETS</span>
+            <span>JOIN THE ELITE 1%</span>
+        </div>
+    </div>
+</div>
+
+<div class="price-ticker">
+    <div class="ticker-content">
+        GOLD 24K: ₹ 74,520/10g <span style="color:#0f0">▲</span> &nbsp;&nbsp; | &nbsp;&nbsp; 
+        SILVER 999: ₹ 92,100/kg <span style="color:#f00">▼</span> &nbsp;&nbsp; | &nbsp;&nbsp; 
+        PLATINUM: ₹ 34,200/10g <span style="color:#0f0">▲</span> &nbsp;&nbsp; | &nbsp;&nbsp;
+        GOLD 22K: ₹ 68,300/10g <span style="color:#0f0">▲</span> &nbsp;&nbsp; | &nbsp;&nbsp;
+        MARKET STATUS: <span style="color:var(--gold)">BULLISH</span>
+    </div>
+</div>
+
+<nav>
+<a href="https://agent-6973abc4d5d97a35efcbbf8d--goldbird.netlify.app/#" class="logo-text">GOLDBIRD</a>
+<div class="nav-links">
+<a href="https://agent-6973abc4d5d97a35efcbbf8d--goldbird.netlify.app/#buy">Marketplace</a>
+<a href="https://agent-6973abc4d5d97a35efcbbf8d--goldbird.netlify.app/#sell">Sell Asset</a>
+<a href="https://agent-6973abc4d5d97a35efcbbf8d--goldbird.netlify.app/#franchise">Shop Franchise</a>
+<a href="javascript:void(0)" onclick="openModal(&#39;profileModal&#39;)">My Profile</a>
+<a href="https://agent-6973abc4d5d97a35efcbbf8d--goldbird.netlify.app/#about">About</a>
+<a href="https://agent-6973abc4d5d97a35efcbbf8d--goldbird.netlify.app/#escrow">Escrow</a>
+</div>
+<div class="nav-icons">
+<button class="icon-btn" onclick="openModal(&#39;loginModal&#39;)">LOGIN</button>
+<button class="icon-btn gold" onclick="openModal(&#39;signupModal&#39;)">SIGN UP</button>
+</div>
+</nav>
+
+<section class="hero">
+<div class="hero-content">
+<h1>Pure Gold.<br>Pure Trust.</h1>
+<p>Experience the heritage of purity with Goldbird. From investment bars to exquisite bridal jewelry, we set the golden standard.</p>
+<button class="gold" onclick="location.href=&#39;#buy&#39;">Browse Shop</button>
+<button class="outline" onclick="location.href=&#39;#sell&#39;">List My Metal</button>
+</div>
+</section>
+
+<section id="profile-section" class="profile-elite-section">
+    <div class="elite-badge">₹ 1L ELITE MEMBER</div>
+    <h2 style="font-family: &#39;Playfair Display&#39;; color: var(--gold); font-size: 32px; margin-bottom: 10px;">Premium Investor Dashboard</h2>
+    <p style="color: #888; margin-bottom: 20px;">Welcome to the inner circle of Goldbird. Your status grants you 0% brokerage and priority doorstep delivery.</p>
+    <div style="display: flex; gap: 40px; border-top: 1px solid #333; padding-top: 20px;">
+        <div><small style="color:var(--gold)">Status</small><br><strong>Active Elite</strong></div>
+        <div><small style="color:var(--gold)">Portfolio Value</small><br><strong>₹ 0.00</strong></div>
+        <div><small style="color:var(--gold)">Next Goal</small><br><strong>Royal Access</strong></div>
+    </div>
+</section>
+
+<section id="buy" class="section">
+<h2 style="color:var(--gold);font-family:&#39;Playfair Display&#39;;margin-bottom:20px;font-size:30px;">Elite Marketplace</h2>
+<div class="search-flex">
+<input type="text" id="searchInput" class="search-bar" placeholder="Search gold, silver..." onkeyup="filterItems()">
+<select id="categoryFilter" class="filter-select" onchange="filterItems()">
+<option value="">All Categories</option>
+<option value="gold">Gold</option>
+<option value="silver">Silver</option>
+<option value="jewelry">Jewelry</option>
+<option value="membership">Memberships</option>
+</select>
+</div>
+
+<div class="grid-3" id="productGrid">
+    <div class="product-card" data-name="royal circle membership" data-cat="membership" style="border: 2px solid var(--gold);">
+        <img src="./Goldbird Online _ Elite Marketplace_files/photo-1634926878768-2a5b3c42f139" alt="Gold bird sculpture in warm light">
+        <div class="product-body">
+            <span style="color:var(--gold); font-size: 10px; font-weight: bold;">EXCLUSIVE ACCESS</span>
+            <h3>Royal Circle Membership</h3>
+            <p class="price">₹ 2,999</p>
+            <button class="card-btn" onclick="buyNow(&#39;Royal Circle Membership&#39;)">Join The Circle</button>
+            <p style="font-size: 11px; color: #777;">Lifetime VIP Benefits &amp; Early Launch Access.</p>
+        </div>
+    </div>
+
+    <div class="product-card" data-name="swiss gold coin 5g" data-cat="gold">
+        <img src="./Goldbird Online _ Elite Marketplace_files/photo-1610375461246-83df859d849d" alt="Gold coin close-up">
+        <div class="product-body">
+            <h3>Swiss 24K Gold Coin (5g)</h3>
+            <p class="price">₹ 37,260</p>
+            <button class="card-btn" onclick="buyNow(&#39;Swiss Gold Coin 5g&#39;)">Buy Now</button>
+            <button class="card-btn" onclick="addToCart(&#39;Swiss Gold Coin 5g&#39;)">Wishlist</button>
+        </div>
+    </div>
+    <div class="product-card" data-name="silver ornamental plate" data-cat="silver">
+        <img src="./Goldbird Online _ Elite Marketplace_files/photo-1573167101669-476636b96cea" alt="Decorative silver plate">
+        <div class="product-body">
+            <h3>Pure Silver Gift Plate</h3>
+            <p class="price">₹ 12,450</p>
+            <button class="card-btn" onclick="buyNow(&#39;Silver Gift Plate&#39;)">Buy Now</button>
+            <button class="card-btn" onclick="addToCart(&#39;Silver Gift Plate&#39;)">Wishlist</button>
+        </div>
+    </div>
+    <div class="product-card" data-name="bridal gold necklace set" data-cat="jewelry">
+        <img src="./Goldbird Online _ Elite Marketplace_files/photo-1515562141207-7a88fb7ce338" alt="Bridal gold necklace set">
+        <div class="product-body">
+            <h3>Heritage Bridal Necklace Set</h3>
+            <p class="price">₹ 4,85,000</p>
+            <button class="card-btn" onclick="buyNow(&#39;Bridal Gold Set&#39;)">Buy Now</button>
+            <button class="card-btn" onclick="addToCart(&#39;Bridal Gold Set&#39;)">Wishlist</button>
+        </div>
+    </div>
+    <div class="product-card" data-name="gold biscuit 50g" data-cat="gold">
+        <img src="./Goldbird Online _ Elite Marketplace_files/photo-1589182373726-e4f658ab50f0" alt="Stacked gold bars">
+        <div class="product-body">
+            <h3>Investment Gold Biscuit (50g)</h3>
+            <p class="price">₹ 3,72,600</p>
+            <button class="card-btn" onclick="buyNow(&#39;Gold Biscuit 50g&#39;)">Buy Now</button>
+            <button class="card-btn" onclick="addToCart(&#39;Gold Biscuit 50g&#39;)">Wishlist</button>
+        </div>
+    </div>
+    <div class="product-card" data-name="silver coin laxmi ganesh" data-cat="silver">
+        <img src="./Goldbird Online _ Elite Marketplace_files/photo-1620656093836-193439970335" alt="Silver coin on display">
+        <div class="product-body">
+            <h3>Divine Silver Coin (100g)</h3>
+            <p class="price">₹ 9,500</p>
+            <button class="card-btn" onclick="buyNow(&#39;Silver Coin 100g&#39;)">Buy Now</button>
+            <button class="card-btn" onclick="addToCart(&#39;Silver Coin 100g&#39;)">Wishlist</button>
+        </div>
+    </div>
+    <div class="product-card" data-name="diamond gold ring" data-cat="jewelry">
+        <img src="./Goldbird Online _ Elite Marketplace_files/photo-1605100804763-247f67b3557e" alt="Diamond solitaire ring">
+        <div class="product-body">
+            <h3>Diamond Solitaire Ring</h3>
+            <p class="price">₹ 65,000</p>
+            <button class="card-btn" onclick="buyNow(&#39;Diamond Ring&#39;)">Buy Now</button>
+            <button class="card-btn" onclick="addToCart(&#39;Diamond Ring&#39;)">Wishlist</button>
+        </div>
+    </div>
+    <div class="product-card" data-name="gold bangle set" data-cat="jewelry">
+        <img src="./Goldbird Online _ Elite Marketplace_files/photo-1535632787350-4e68ef0ac584" alt="Gold bangles">
+        <div class="product-body">
+            <h3>Floral Gold Bangles (22K)</h3>
+            <p class="price">₹ 1,20,000</p>
+            <button class="card-btn" onclick="buyNow(&#39;Gold Bangles&#39;)">Buy Now</button>
+            <button class="card-btn" onclick="addToCart(&#39;Gold Bangles&#39;)">Wishlist</button>
+        </div>
+    </div>
+    <div class="product-card" data-name="silver anklets payal" data-cat="silver">
+        <img src="./Goldbird Online _ Elite Marketplace_files/photo-1611085583191-a3b1318431fa" alt="Silver anklets">
+        <div class="product-body">
+            <h3>Pure Silver Bridal Payal</h3>
+            <p class="price">₹ 7,800</p>
+            <button class="card-btn" onclick="buyNow(&#39;Silver Payal&#39;)">Buy Now</button>
+            <button class="card-btn" onclick="addToCart(&#39;Silver Payal&#39;)">Wishlist</button>
+        </div>
+    </div>
+    <div class="product-card" data-name="custom gold pendant" data-cat="jewelry">
+        <img src="./Goldbird Online _ Elite Marketplace_files/photo-1599643478518-a784e5dc4c8f" alt="Gold feather pendant">
+        <div class="product-body">
+            <h3>Gold Feather Pendant</h3>
+            <p class="price">₹ 22,000</p>
+            <button class="card-btn" onclick="buyNow(&#39;Gold Pendant&#39;)">Buy Now</button>
+            <button class="card-btn" onclick="addToCart(&#39;Gold Pendant&#39;)">Wishlist</button>
+        </div>
+    </div>
+    <div class="product-card" data-name="gold bar pamp" data-cat="gold">
+        <img src="./Goldbird Online _ Elite Marketplace_files/photo-1610375461246-83df859d849d" alt="PAMP gold bar close-up">
+        <div class="product-body">
+            <h3>PAMP 24K Gold Bar (10g)</h3>
+            <p class="price">₹ 74,520</p>
+            <button class="card-btn" onclick="buyNow(&#39;PAMP 24K Gold Bar&#39;)">Buy Now</button>
+            <button class="card-btn" onclick="addToCart(&#39;PAMP 24K Gold Bar&#39;)">Wishlist</button>
+        </div>
+    </div>
+</div>
+</section>
+
+<section id="franchise" class="section" style="background: #000;">
+    <h2 style="color:var(--gold); font-family:&#39;Playfair Display&#39;; font-size: 35px;">Goldbird Shop Franchise</h2>
+    <p style="color: #888; margin-bottom: 40px;">Partner with us to build India's largest digital-physical metal network.</p>
+    
+    <div class="franchise-grid">
+        <div class="franchise-card">
+            <h3 style="color: var(--gold-light);">Standard Franchise</h3>
+            <p class="franchise-price">₹ 5,00,000</p>
+            <ul style="text-align: left; color: #ccc; font-size: 14px; margin-bottom: 20px; list-style: none;">
+                <li>✓ Basic Inventory Access</li>
+                <li>✓ Goldbird Brand License</li>
+                <li>✓ CRM Software Support</li>
+            </ul>
+            <button class="card-btn" onclick="buyNow(&#39;5L Standard Franchise&#39;)">Enquire Now</button>
+        </div>
+        <div class="franchise-card" style="border-color: var(--gold);">
+            <h3 style="color: var(--gold);">Elite Franchise</h3>
+            <p class="franchise-price">₹ 10,00,000</p>
+            <ul style="text-align: left; color: #ccc; font-size: 14px; margin-bottom: 20px; list-style: none;">
+                <li>✓ Full Collection Display</li>
+                <li>✓ Dedicated Account Manager</li>
+                <li>✓ Regional Marketing Control</li>
+            </ul>
+            <button class="card-btn" onclick="buyNow(&#39;10L Elite Franchise&#39;)">Become Elite Partner</button>
+        </div>
+    </div>
+</section>
+
+<section id="sell" class="section" style="background:var(--maroon);border-radius:12px;">
+<h2 style="color:var(--gold);margin-bottom:20px;">Sell Your Asset</h2>
+<div class="sell-box">
+<select id="assetCategory"><option>GOLD</option><option>SILVER</option></select>
+<input type="text" id="sellName" placeholder="Item Name (e.g. Old Ring, Coin)">
+<input type="number" id="sellWeight" placeholder="Weight in Grams">
+<label class="file-label" for="itemPhoto">📸 UPLOAD ITEM PHOTO</label>
+<input type="file" id="itemPhoto">
+<button onclick="submitSell()" style="width:100%;padding:15px;background:var(--gold);border:none;color:#000;">Submit for Valuation</button>
+</div>
+</section>
+
+<section id="wishlist" class="section">
+    <h2 style="color:var(--gold);font-family:&#39;Playfair Display&#39;;margin-bottom:10px;font-size:30px;">Wishlist</h2>
+    <p style="color:#888;margin-bottom:20px;">Saved items stay on this device for faster checkout.</p>
+    <div class="wishlist-panel">
+        <div class="wishlist-header">
+            <h3>Saved Items</h3>
+            <button class="card-btn secondary" type="button" onclick="clearWishlist()">Clear Wishlist</button>
+        </div>
+        <div id="wishlistList" class="wishlist-list"></div>
+        <p id="wishlistEmpty" class="wishlist-empty" style="display: block;">No items yet. Tap “Wishlist” on any product to save it.</p>
+    </div>
+</section>
+
+<section id="about" class="info-section">
+<h2>About Goldbird</h2>
+<p>Goldbird is international <strong>elite</strong> digital destination for bullion trading and luxury bridal jewelry. Founded by <strong>Pawan Choure</strong>, our vision is to bridge the gap between traditional trust and modern transparency.</p>
+</section>
+
+<section id="escrow" class="info-section">
+<h2>Escrow Protection Policy</h2>
+<p>Payments are securely held until metal purity is verified and delivery confirmed, eliminating fraud risk.</p>
+</section>
+
+<section id="terms" class="info-section">
+<h2>Terms &amp; Privacy</h2>
+<p>All items undergo purity checks. High-value transactions require KYC. Your data is encrypted and fully protected.</p>
+</section>
+
+<footer>
+<div class="footer-links">
+<h4 style="color:var(--gold);margin-bottom:10px;">Quick Links</h4>
+<a href="https://agent-6973abc4d5d97a35efcbbf8d--goldbird.netlify.app/#about">About Goldbird</a>
+<a href="https://agent-6973abc4d5d97a35efcbbf8d--goldbird.netlify.app/#escrow">Escrow Policy</a>
+<a href="https://agent-6973abc4d5d97a35efcbbf8d--goldbird.netlify.app/#terms">Terms &amp; Privacy</a>
+<a href="https://agent-6973abc4d5d97a35efcbbf8d--goldbird.netlify.app/#franchise">Franchise Inquiry</a>
+</div>
+<div style="margin-top:20px;color:#888;font-size:12px;">
+<p>WhatsApp: +91 7898944334</p>
+<p>Email: sundisk95@gmail.com</p>
+<p>© 2026 Goldbird.online | Founded and visionary Pawan </p>
+</div>
+</footer>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal(&#39;loginModal&#39;)">×</span>
+        <h2 style="color:var(--gold); margin-bottom:20px; text-align:center;">Member Login</h2>
+        <input type="email" placeholder="Email Address" class="search-bar" style="width:100%; margin-bottom:15px; border:1px solid #333;">
+        <input type="password" placeholder="Password" class="search-bar" style="width:100%; margin-bottom:20px; border:1px solid #333;">
+        <button class="card-btn" onclick="alert(&#39;Login functionality coming soon!&#39;); closeModal(&#39;loginModal&#39;)">SECURE LOGIN</button>
+        <p style="text-align:center; margin-top:15px; font-size:12px; color:#666;">Forgot Password?</p>
+    </div>
+</div>
+
+<!-- SIGNUP MODAL -->
+<div id="signupModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal(&#39;signupModal&#39;)">×</span>
+        <h2 style="color:var(--gold); margin-bottom:20px; text-align:center;">Join The Elite</h2>
+        <input type="text" placeholder="Full Name" class="search-bar" style="width:100%; margin-bottom:15px; border:1px solid #333;">
+        <input type="email" placeholder="Email Address" class="search-bar" style="width:100%; margin-bottom:15px; border:1px solid #333;">
+        <input type="password" placeholder="Create Password" class="search-bar" style="width:100%; margin-bottom:20px; border:1px solid #333;">
+        <button class="card-btn" onclick="alert(&#39;Welcome to Goldbird!&#39;); closeModal(&#39;signupModal&#39;)">CREATE ACCOUNT</button>
+    </div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div id="profileModal" class="modal" style="display: none;">
+    <div class="modal-content" style="text-align:center;">
+        <span class="close-btn" onclick="closeModal(&#39;profileModal&#39;)">×</span>
+        <div style="width:80px; height:80px; background:#222; border-radius:50%; margin:0 auto 20px; display:flex; align-items:center; justify-content:center; border:2px solid var(--gold);">
+            <span style="font-size:30px;">👤</span>
+        </div>
+        <h2 style="color:var(--gold); margin-bottom:5px;">Guest User</h2>
+        <p style="color:#666; font-size:12px; margin-bottom:20px;">ID: GB-GUEST-2026</p>
+        
+        <div style="background:#111; padding:15px; border-radius:8px; margin-bottom:20px; text-align:left;">
+            <p style="color:#aaa; font-size:13px; display:flex; justify-content:space-between;"><span>Status:</span> <span style="color:var(--gold)">Visitor</span></p>
+            <p style="color:#aaa; font-size:13px; display:flex; justify-content:space-between; margin-top:8px;"><span>Wallet:</span> <span>₹ 0.00</span></p>
+        </div>
+        
+        <button class="card-btn" onclick="closeModal(&#39;profileModal&#39;); openModal(&#39;signupModal&#39;)">UPGRADE TO ELITE</button>
+    </div>
+</div>
+
+<script>
+const CONTACT_WHATSAPP = "917898944334";
+const WISHLIST_KEY = "goldbirdWishlist";
+
+function openModal(id){document.getElementById(id).style.display='flex';}
+function closeModal(id){document.getElementById(id).style.display='none';}
+function buyNow(item){window.open(`https://api.whatsapp.com/send?phone=${CONTACT_WHATSAPP}&text=I am interested in: ${item}`,'_blank');}
+function submitSell(){const cat=document.getElementById('assetCategory').value;const name=document.getElementById('sellName').value;window.open(`https://api.whatsapp.com/send?phone=${CONTACT_WHATSAPP}&text=I want to sell my used ${cat}: ${name}`,'_blank');}
+function filterItems(){let text=document.getElementById('searchInput').value.toLowerCase();let cat=document.getElementById('categoryFilter').value.toLowerCase();document.querySelectorAll('.product-card').forEach(card=>{let matchesText=card.getAttribute('data-name').toLowerCase().includes(text);let matchesCat=cat===''||card.getAttribute('data-cat')===cat;card.style.display=(matchesText&&matchesCat)?'':'none';});}
+
+function getWishlist(){try{return JSON.parse(localStorage.getItem(WISHLIST_KEY))||[];}catch(e){return [];}}
+function setWishlist(items){localStorage.setItem(WISHLIST_KEY, JSON.stringify(items));}
+function renderWishlist(){const listEl=document.getElementById('wishlistList');const emptyEl=document.getElementById('wishlistEmpty');if(!listEl||!emptyEl){return;}const items=getWishlist();listEl.innerHTML='';if(items.length===0){emptyEl.style.display='block';return;}emptyEl.style.display='none';items.forEach(item=>{const row=document.createElement('div');row.className='wishlist-item';const name=document.createElement('span');name.textContent=item;const remove=document.createElement('button');remove.className='card-btn secondary';remove.type='button';remove.textContent='Remove';remove.onclick=()=>removeFromWishlist(item);row.append(name, remove);listEl.append(row);});}
+function addToCart(item){const items=getWishlist();if(!items.includes(item)){items.push(item);setWishlist(items);renderWishlist();}alert(`${item} added to Wishlist ✅`);}
+function removeFromWishlist(item){const items=getWishlist().filter(entry=>entry!==item);setWishlist(items);renderWishlist();}
+function clearWishlist(){setWishlist([]);renderWishlist();}
+
+document.addEventListener('DOMContentLoaded', renderWishlist);
+</script>
+
+
+</body><div id="smartyContainer" style="position: absolute; top: 0px; right: 0px; line-height: initial; z-index: 2147483647; width: auto; font-size: initial;"><template shadowrootmode="open"><style>@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/poppins/v24/pxiEyp8kv8JHgFVrJJfedw.ttf) format('truetype');
+}
+@media screen and (max-width: 812px) {
+  #sm-coupon-container {
+    position: fixed;
+    bottom: -6000px;
+    z-index: 2147483647;
+    -webkit-transition: all 0.8s;
+    -moz-transition: all 0.8s;
+    -o-transition: all 0.8s;
+    transition: all 0.8s;
+  }
+  #sm-coupon-container.sm-animate-visible {
+    bottom: 0;
+  }
+  #sm-coupon-container.sm-centered {
+    bottom: 0;
+  }
+  #sm-coupon-container .sm-coupon-wrapper {
+    background-color: #ffffff;
+    border-radius: 15px;
+    width: 100vw;
+  }
+  #sm-coupon-container .sm-header {
+    margin: 0px;
+    padding: 0px;
+    border-bottom: 1px solid #eee;
+  }
+  #sm-coupon-container .sm-header .sm-logo1 {
+    margin: 7px 5px 0 5px;
+    cursor: pointer;
+  }
+  #sm-coupon-container .sm-header img.sm-logo1 {
+    width: 80px;
+  }
+  #sm-coupon-container .sm-header .sm-cross-icon {
+    float: right;
+    cursor: pointer;
+    margin-top: 7px;
+    margin-right: 5px;
+  }
+  #sm-coupon-container .sm-header .sm-cross-icon img {
+    margin: 10px 14px;
+    width: 11px;
+  }
+  #sm-coupon-container .sm-activation-button {
+    font-size: 18px;
+    text-align: center;
+    min-width: 70%;
+    padding: 0 5px;
+    line-height: 40px;
+    border-radius: 5px;
+  }
+  #sm-coupon-container .sm-activation-button :hover {
+    font-size: 22px;
+    min-width: 85%;
+  }
+  #sm-coupon-container .sm-activation-button img {
+    height: 15px;
+  }
+  #sm-coupon-container .sm-support a {
+    font-size: 8px !important;
+  }
+  #sm-coupon-container .sm-coupon-codes {
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
+  #sm-coupon-container .sm-valid-codes {
+    overflow: hidden;
+    height: 56px;
+  }
+  #sm-coupon-container #exclusions-text {
+    font-family: Verdana;
+    font-size: 8pt;
+    bottom: 40px;
+    background-color: #eeeeee;
+    color: #333333;
+    padding: 5px 20px;
+    border-radius: 5px;
+  }
+  #sm-coupon-container h1 {
+    font-size: 20px;
+  }
+  #sm-coupon-container h2 {
+    font-size: 18px;
+  }
+  #sm-coupon-container h3 {
+    font-size: 15px;
+  }
+  #sm-coupon-container h4 {
+    font-size: 12px;
+  }
+  #sm-coupon-container h5 {
+    font-size: 10px;
+  }
+  #sm-coupon-container h6 {
+    font-size: 10.2px;
+  }
+}
+@media screen and (min-width: 813px) {
+  #sm-coupon-container {
+    position: fixed;
+    z-index: 2147483647;
+    top: -8px;
+    right: -3600px;
+    -webkit-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    transition: all 0.4s;
+  }
+  #sm-coupon-container.sm-animate-visible {
+    right: 0;
+  }
+  #sm-coupon-container.sm-centered {
+    right: calc(50vw - 325px);
+    top: calc(50vh - 240px);
+  }
+  #sm-coupon-container .sm-coupon-wrapper {
+    width: 374px;
+  }
+  #sm-coupon-container .sm-header {
+    margin: 0px;
+    padding: 0 15px;
+  }
+  #sm-coupon-container .sm-header .sm-logo1 {
+    margin: 10px;
+    cursor: pointer;
+  }
+  #sm-coupon-container .sm-header .sm-cross-icon {
+    float: right;
+    margin-top: 11px;
+    cursor: pointer;
+  }
+  #sm-coupon-container .sm-activation-button {
+    font-size: 20px;
+    text-align: center;
+    min-width: 70%;
+    padding: 0 5px;
+    line-height: 45px;
+    border-radius: 5px;
+  }
+  #sm-coupon-container .sm-activation-button :hover {
+    font-size: 22px;
+    min-width: 85%;
+  }
+  #sm-coupon-container .sm-activation-button img {
+    height: 15px;
+  }
+  #sm-coupon-container .sm-coupon-codes {
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  #sm-coupon-container .sm-valid-codes {
+    overflow: hidden;
+    height: 62px;
+  }
+  #sm-coupon-container #exclusions-text {
+    font-family: Verdana;
+    font-size: 8pt;
+    margin-left: 15px;
+    position: absolute;
+    bottom: 40px;
+    width: 300px;
+    background-color: #eeeeee;
+    color: #333333;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  #sm-coupon-container h1 {
+    font-size: 25px;
+  }
+  #sm-coupon-container h2 {
+    font-size: 20px;
+  }
+  #sm-coupon-container h3 {
+    font-size: 18px !important;
+    text-align: center !important;
+  }
+  #sm-coupon-container h4 {
+    font-size: 15px;
+  }
+  #sm-coupon-container h5 {
+    font-size: 12px;
+  }
+  #sm-coupon-container h6 {
+    font-size: 10.2px;
+  }
+}
+#sm-coupon-container.no-transition {
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+#sm-coupon-container span#checkedCoupons,
+#sm-coupon-container span#totalCoupons {
+  font-size: inherit;
+}
+#sm-coupon-container .sm-coupon-wrapper {
+  background-color: #ffffff;
+  border-radius: 5px;
+  margin-top: 0px;
+  margin-right: 15px;
+  margin-top: 25px;
+}
+#sm-coupon-container a,
+#sm-coupon-container a:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
+#sm-coupon-container .sm-activation-button {
+  display: inline-block;
+  background-color: #6d6fd5 !important;
+  color: #fff;
+  cursor: pointer;
+  -webkit-transition: 0.05s;
+  transition: 0.05s;
+  transition-timing-function: ease-in-out;
+}
+#sm-coupon-container #sm-style-4::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #F5F5F5;
+}
+#sm-coupon-container #sm-style-4::-webkit-scrollbar {
+  width: 4px;
+  background-color: #999999;
+}
+#sm-coupon-container #sm-style-4::-webkit-scrollbar-thumb {
+  background-color: #999999;
+  border: 2px solid #999999;
+}
+#sm-coupon-container .sm-margin0 {
+  margin: 0px;
+}
+#sm-coupon-container .sm-coupons {
+  background-color: #fff;
+  padding: 0px 10px;
+  width: 100%;
+  text-align: center;
+  text-transform: none;
+}
+#sm-coupon-container .sm-best-coupons {
+  background-color: #6d6fd5 !important;
+  display: inline-block;
+  padding: 0 55px;
+  line-height: 49px;
+  color: #fff !important;
+  font-size: 18px;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 5px;
+}
+#sm-coupon-container .sm-claim {
+  background-color: #6d6fd5 !important;
+  display: inline-block;
+  padding: 0 55px;
+  line-height: 49px;
+  color: #fff !important;
+  font-size: 18px;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 5px;
+}
+#sm-coupon-container .sm-invalid-codes {
+  width: initial;
+}
+#sm-coupon-container .sm-support {
+  float: left;
+  margin-right: 15px;
+  width: initial;
+}
+#sm-coupon-container .sm-support .sm-icon {
+  float: left;
+  height: 20px;
+  margin-bottom: 5px;
+  width: 100%;
+}
+#sm-coupon-container .sm-support .sm-invalid {
+  transition: margin 0.1s;
+  -webkit-transition: margin 0.1s;
+  float: none;
+}
+#sm-coupon-container .sm-support .sm-valid {
+  margin: 5px;
+  transition: margin 0.1s;
+  -webkit-transition: margin 0.1s;
+}
+#sm-coupon-container .sm-support a {
+  width: 100%;
+  background-color: #e8e8e8 !important;
+  color: #6d6fd5 !important;
+  padding: 10px 8px;
+  font-size: 11px;
+  letter-spacing: 0.35px;
+  font-weight: 700;
+  border-radius: 5px;
+  min-width: 100px;
+  text-align: center;
+  transition: all 0.4s;
+  -webkit-transition: all 0.4s;
+}
+#sm-coupon-container .sm-coupon-invalid {
+  background-color: #fff !important;
+  width: 100%;
+  opacity: 0.3;
+  border: solid 1px #e8e8e8;
+  color: #5e5e5e;
+  padding: 2px 0px;
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+#sm-coupon-container .sm-progress-bar {
+  float: left;
+  width: 0;
+  height: 100%;
+  font-size: 12px;
+  line-height: 20px;
+  color: #fff;
+  text-align: center;
+  background-color: #6d6fd5;
+  -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  -webkit-transition: width 0.6s ease;
+  -o-transition: width 0.6s ease;
+  transition: width 0.6s ease;
+}
+#sm-coupon-container .sm-progress {
+  height: 7px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+#sm-coupon-container .sm-not-working {
+  position: absolute;
+  bottom: 10px;
+  width: 374px;
+  right: 25px;
+  text-align: center;
+}
+#sm-coupon-container .sm-not-working a {
+  text-transform: none;
+  color: #6d6fd5;
+}
+#sm-coupon-container .sm-error-img {
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+#sm-coupon-container .sm-error {
+  font-size: 14px;
+  margin-top: 30px;
+  text-align: left;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+#sm-coupon-container .sm-error ul {
+  text-align: left;
+  margin-bottom: 30px;
+  padding-left: 20px;
+  list-style-type: disc !important;
+}
+#sm-coupon-container .sm-error ul li {
+  font-size: 14px;
+}
+#sm-coupon-container .sm-content {
+  font-size: 16px !important;
+  margin: 20px;
+  text-align: center;
+}
+#sm-coupon-container .sm-content a.sm-visit {
+  background-color: #6d6fd5 !important;
+  display: inline-block;
+  padding: 0 55px;
+  line-height: 49px;
+  color: #fff !important;
+  font-size: 18px;
+  cursor: pointer;
+  text-align: center;
+  border-radius: 5px;
+}
+#sm-coupon-container .sm-primary,
+#sm-coupon-container .sm-button {
+  background-color: #6d6fd5;
+  width: 100%;
+  line-height: 49px;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  text-align: center;
+  padding: 9px 15px;
+  border-radius: 5px;
+}
+#sm-coupon-container .sm-activate-later {
+  font-size: 14px !important;
+  font-weight: 600;
+  color: #252d6a;
+}
+#sm-coupon-container .sm-coupon {
+  display: inline !important;
+  background-color: #e8e8e8 !important;
+  color: #6d6fd5 !important;
+  padding: 10px 20px !important;
+  font-size: 15px !important;
+  letter-spacing: 0.35px !important;
+  font-weight: 700 !important;
+  border-radius: 5px !important;
+  min-width: 100px !important;
+  text-align: center !important;
+}
+#sm-coupon-container .sm-share-coupon {
+  background-color: #6d6fd5 !important;
+  width: 100% !important;
+  line-height: 49px !important;
+  color: #fff !important;
+  font-size: 15px !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  padding: 9px 15px !important;
+  border-radius: 5px !important;
+}
+#sm-coupon-container .sm-working-coupon {
+  color: #252d6a;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 5px;
+}
+#sm-coupon-container .sm-congrats {
+  color: #f5a80c;
+  font-size: 27px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 40px;
+}
+#sm-coupon-container .sm-green {
+  color: #00c57d;
+  font-weight: 700;
+  font-size: 20px;
+}
+#sm-coupon-container .sm-success-btn {
+  padding: 10px;
+  height: 42px;
+  overflow: hidden;
+  background-color: transparent;
+  border-color: #6d6fd5 !important;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  color: #6d6fd5;
+  font-weight: bold !important;
+  font-size: 15px !important;
+  cursor: pointer;
+}
+#sm-coupon-container .sm-button-disabled {
+  padding: 10px;
+  height: 42px;
+  overflow: hidden;
+  background-color: transparent;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  color: #aaa;
+  font-weight: bold !important;
+  font-size: 15px !important;
+  cursor: pointer;
+}
+#sm-coupon-container .sm-review {
+  background: #6d6fd5;
+  color: #fff;
+  width: 185px;
+  margin: auto;
+}
+#sm-coupon-container .sm-logo {
+  justify-self: start;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+#sm-coupon-container .sm-close {
+  margin: 5px 10px;
+  justify-self: end;
+  align-self: start;
+  cursor: pointer;
+}
+#sm-coupon-container .exclusions {
+  text-align: center;
+}
+#sm-coupon-container #exclusions-button {
+  font-weight: 600;
+  font-size: 9pt;
+  cursor: pointer;
+}
+#sm-coupon-container .exclusions-hidden {
+  display: none;
+}
+#sm-coupon-container .sm-code {
+  color: #6d6fd5;
+}
+#sm-coupon-container .sm-copy {
+  border: 1px solid #f5a80c;
+  background: #ffc954;
+}
+#sm-coupon-container .sm-coupon-list::-webkit-scrollbar-thumb {
+  background-color: #6d6fd5;
+}
+#sm-coupon-container .sm-go {
+  background-color: #f5a80c;
+  color: #FFF;
+}
+#sm-coupon-container .span-all {
+  grid-column: 1 / span 2;
+}
+#sm-coupon-container .sm-save {
+  font-size: 13pt;
+  font-weight: 800;
+  color: #252d6a;
+  margin-bottom: 15px;
+}
+#sm-coupon-container .sm-price-redirect {
+  cursor: pointer;
+}
+#sm-coupon-container .sm-refer-email {
+  padding: 10px;
+  height: 35px;
+  width: 175px;
+  border-color: #949393 !important;
+  border-radius: 8px 0px 0px 8px;
+  border-style: solid;
+  border-width: 1px;
+  outline: none;
+  font-size: 14px !important;
+}
+#sm-coupon-container .sm-refer-submit {
+  padding: 5px 7px 7px 8px;
+  height: 32px;
+  overflow: hidden;
+  background-color: #6d6fd5;
+  border-color: #6d6fd5 !important;
+  border-radius: 0px 8px 8px 0px;
+  border-style: solid;
+  border-width: 1px;
+  color: #fff;
+  font-size: 15px !important;
+  cursor: pointer;
+}
+#sm-coupon-container .sm-refer-btn {
+  margin: auto;
+  padding: 6px;
+  height: 38px;
+  width: 180px;
+  overflow: hidden;
+  background-color: transparent;
+  border-color: #6d6fd5 !important;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  color: #6d6fd5;
+  font-size: 15px !important;
+  font-weight: bold;
+  cursor: pointer;
+}
+#sm-coupon-container .sm-referral-msg {
+  font-size: 14px !important;
+  margin: 5px;
+  font-weight: 500;
+  height: 40px;
+}
+#sm-coupon-container .sm-referral-success {
+  color: #00c57d;
+}
+#sm-coupon-container .sm-referral-error {
+  color: #ff0000;
+}
+#sm-coupon-container .sm-exclusions {
+  padding: 10px 0px;
+  color: #716f6f;
+  font-size: 14px;
+}
+#sm-coupon-container .sm-small-link {
+  text-decoration: underline;
+  color: #252d6a;
+  font-size: 8pt;
+  cursor: pointer;
+}
+#sm-inline-content {
+  all: initial;
+}
+#sm-inline-content .sm-searching-button {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 5px;
+  border: 2px solid #ccc;
+  color: #888;
+  font-family: Poppins;
+  font-size: 11pt;
+  font-weight: bold;
+  margin: 5px 0;
+  padding-top: 5px;
+  height: 22px;
+}
+#sm-inline-content .sm-found-button {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 5px;
+  background-color: #6d6fd5;
+  color: #ffffff;
+  border: initial;
+  font-family: Poppins;
+  font-size: 11pt;
+  font-weight: bold;
+  margin: 5px 0;
+  padding-top: 5px;
+  height: 25px;
+  cursor: pointer;
+}
+#sm-inline-content .sm-img {
+  vertical-align: middle;
+  height: 20px;
+  margin-right: 5px;
+}
+#sm-inline-content .sm-loading {
+  vertical-align: middle;
+  height: 8px;
+}
+#sm-full-loader {
+  position: fixed;
+  z-index: 2147483646;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.7;
+}
+.bg-facebook {
+  background-color: #3c579e;
+}
+.bg-google {
+  background-color: #4285f4;
+}
+.bg-microsoft {
+  background-color: #2f2f2f;
+}
+.bg-apple {
+  background-color: #000000;
+}
+</style></template></div></html>
