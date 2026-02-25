@@ -1,0 +1,120 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Profile - Goldbird{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card profile-card">
+                {% if profile.profile_picture %}
+                <img src="{{ profile.profile_picture.url }}" alt="Profile" class="profile-image">
+                {% else %}
+                <div style="width: 150px; height: 150px; border-radius: 50%; background-color: #ccc; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-user fa-5x" style="color: #999;"></i>
+                </div>
+                {% endif %}
+                
+                <h3>{{ profile.user.first_name }} {{ profile.user.last_name }}</h3>
+                <p class="text-muted">{{ profile.age }} years old</p>
+                
+                {% if request.user != profile.user and request.user.is_authenticated %}
+                <form method="post" action="{% url 'like_user' profile.user.username %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn like-btn {% if is_liked %}liked{% endif %} w-100">
+                        <i class="fas fa-heart"></i> {% if is_liked %}Liked{% else %}Like{% endif %}
+                    </button>
+                </form>
+                {% if is_matched %}
+                <a href="{% url 'chat_room' profile.user.username %}" class="btn btn-primary w-100 mt-2">
+                    <i class="fas fa-comments"></i> Chat with {{ profile.user.first_name|default:profile.user.username }}
+                </a>
+                {% endif %}
+                {% elif request.user == profile.user %}
+                <a href="{% url 'profile_edit' %}" class="btn btn-primary w-100">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="col-md-8 mb-4">
+            <div class="card">
+                <div class="card-body p-4">
+                    <h5 class="card-title"><i class="fas fa-info-circle"></i> Personal Information</h5>
+                    <hr>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Gender:</strong></p>
+                            <p>{{ profile.get_gender_display }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Age:</strong></p>
+                            <p>{{ profile.age }} years</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Height:</strong></p>
+                            <p>{{ profile.height }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Religion:</strong></p>
+                            <p>{{ profile.get_religion_display }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Marital Status:</strong></p>
+                            <p>{{ profile.get_marital_status_display }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Location:</strong></p>
+                            <p>{{ profile.location }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-body p-4">
+                    <h5 class="card-title"><i class="fas fa-briefcase"></i> Professional Information</h5>
+                    <hr>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Occupation:</strong></p>
+                            <p>{{ profile.occupation }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Education:</strong></p>
+                            <p>{{ profile.education }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Annual Income:</strong></p>
+                            <p>{{ profile.income }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Phone:</strong></p>
+                            <p>{{ profile.phone }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-body p-4">
+                    <h5 class="card-title"><i class="fas fa-heart"></i> About Me</h5>
+                    <hr>
+                    <p>{{ profile.bio }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

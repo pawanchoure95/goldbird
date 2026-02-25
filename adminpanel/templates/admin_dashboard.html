@@ -1,0 +1,70 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - Goldbird{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-8">
+            <h2 class="mb-4"><i class="fas fa-chart-line"></i> Admin Dashboard</h2>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="{% url 'admin_logout' %}" class="btn btn-danger">Logout</a>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="stats-box">
+                <i class="fas fa-users fa-3x" style="color: var(--primary-color);"></i>
+                <div class="stats-number">{{ total_users }}</div>
+                <div class="stats-label">Total Users</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="stats-box">
+                <i class="fas fa-user-check fa-3x" style="color: var(--primary-color);"></i>
+                <div class="stats-number">{{ active_users }}</div>
+                <div class="stats-label">Active Profiles</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="stats-box">
+                <i class="fas fa-heart fa-3x" style="color: var(--primary-color);"></i>
+                <div class="stats-number">{{ total_likes }}</div>
+                <div class="stats-label">Total Likes</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="stats-box">
+                <i class="fas fa-file-alt fa-3x" style="color: var(--primary-color);"></i>
+                <div class="stats-number">{{ total_profiles }}</div>
+                <div class="stats-label">Complete Profiles</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body p-4">
+                    <h5 class="card-title"><i class="fas fa-list"></i> User Management</h5>
+                    <p class="card-text">View and manage all user accounts in the system.</p>
+                    <a href="{% url 'admin_users' %}" class="btn btn-primary">Manage Users</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body p-4">
+                    <h5 class="card-title"><i class="fas fa-cog"></i> System Settings</h5>
+                    <p class="card-text">Configure system-wide settings and preferences.</p>
+                    <a href="{% url 'admin:index' %}" class="btn btn-primary">Django Admin</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

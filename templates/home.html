@@ -1,0 +1,110 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Home - Goldbird{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <h1>Find Your Perfect Match</h1>
+        <p>Join thousands of couples who found their soulmates on Goldbird</p>
+        {% if not user.is_authenticated %}
+        <a href="{% url 'register' %}" class="btn btn-hero me-2">Get Started</a>
+        <a href="{% url 'login' %}" class="btn btn-hero">Login</a>
+        {% else %}
+        <a href="{% url 'search' %}" class="btn btn-hero">Start Searching</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="stats-box">
+                <i class="fas fa-users fa-3x" style="color: var(--primary-color);"></i>
+                <div class="stats-number">10000+</div>
+                <div class="stats-label">Active Members</div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="stats-box">
+                <i class="fas fa-heart fa-3x" style="color: var(--primary-color);"></i>
+                <div class="stats-number">5000+</div>
+                <div class="stats-label">Successful Matches</div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="stats-box">
+                <i class="fas fa-globe fa-3x" style="color: var(--primary-color);"></i>
+                <div class="stats-number">50+</div>
+                <div class="stats-label">Locations</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary"><i class="fas fa-lock"></i> Safe & Secure</h5>
+                    <p class="card-text">Your privacy and security are our top priority. We use industry-standard encryption to protect your data.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary"><i class="fas fa-search"></i> Smart Search</h5>
+                    <p class="card-text">Find your perfect match using our advanced filtering options for religion, location, occupation, and more.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary"><i class="fas fa-heart"></i> Express Interest</h5>
+                    <p class="card-text">Easily like profiles and express your interest. Send likes to people who catch your attention.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-primary"><i class="fas fa-mobile-alt"></i> Mobile Friendly</h5>
+                    <p class="card-text">Browse on the go. Our platform is fully responsive and works seamlessly on all devices.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="background-color: #f9f9f9; padding: 60px 0;">
+    <div class="container">
+        <h2 class="text-center mb-4">How It Works</h2>
+        <div class="row">
+            <div class="col-md-3 text-center mb-4">
+                <div style="font-size: 3rem; color: var(--primary-color); margin-bottom: 15px;">1</div>
+                <h5>Create Profile</h5>
+                <p>Register and create your beautiful profile with photos and details.</p>
+            </div>
+            <div class="col-md-3 text-center mb-4">
+                <div style="font-size: 3rem; color: var(--primary-color); margin-bottom: 15px;">2</div>
+                <h5>Browse & Search</h5>
+                <p>Find matches based on your preferences and browse profiles.</p>
+            </div>
+            <div class="col-md-3 text-center mb-4">
+                <div style="font-size: 3rem; color: var(--primary-color); margin-bottom: 15px;">3</div>
+                <h5>Express Interest</h5>
+                <p>Like profiles and show your interest in someone special.</p>
+            </div>
+            <div class="col-md-3 text-center mb-4">
+                <div style="font-size: 3rem; color: var(--primary-color); margin-bottom: 15px;">4</div>
+                <h5>Connect & Meet</h5>
+                <p>Start conversations and meet your perfect match!</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

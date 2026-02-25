@@ -1,0 +1,136 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Search Profiles - Goldbird{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <h2 class="mb-4">Search Profiles</h2>
+    
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-body p-3">
+                    <h5 class="card-title">Filter Results</h5>
+                    <form method="get" id="search-form">
+                        <div class="mb-3">
+                            <label for="id_gender" class="form-label">Gender</label>
+                            {{ form.gender }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_religion" class="form-label">Religion</label>
+                            {{ form.religion }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_age_min" class="form-label">Min Age</label>
+                            {{ form.age_min }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_age_max" class="form-label">Max Age</label>
+                            {{ form.age_max }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_location" class="form-label">Location</label>
+                            {{ form.location }}
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                        <a href="{% url 'search' %}" class="btn btn-secondary w-100 mt-2">Reset</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-9">
+            {% if profiles %}
+            <div class="row">
+                {% for profile in profiles %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card profile-card">
+                        {% if profile.profile_picture %}
+                        <img src="{{ profile.profile_picture.url }}" alt="Profile" class="profile-image">
+                        {% else %}
+                        <div style="width: 150px; height: 150px; border-radius: 50%; background-color: #ccc; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user fa-5x" style="color: #999;"></i>
+                        </div>
+                        {% endif %}
+                        
+                        <h5>{{ profile.user.first_name }} {{ profile.user.last_name }}</h5>
+                        <p class="text-muted">{{ profile.age }} Years, {{ profile.get_gender_display }}</p>
+                        <p class="text-muted">{{ profile.location }}</p>
+                        
+                        <span class="badge-custom">{{ profile.get_religion_display }}</span>
+                        
+                        <div class="mt-3">
+                            <a href="{% url 'profile_view' profile.user.username %}" class="btn btn-sm btn-info w-100 mb-2">
+                                <i class="fas fa-eye"></i> View Profile
+                            </a>
+                            {% if profile.user.id in matched_user_ids %}
+                            <a href="{% url 'chat_room' profile.user.username %}" class="btn btn-sm btn-primary w-100 mb-2">
+                                <i class="fas fa-comments"></i> Chat Now
+                            </a>
+                            {% endif %}
+                            <form method="post" action="{% url 'like_user' profile.user.username %}" style="display: inline; width: 100%;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm like-btn w-100">
+                                    <i class="fas fa-heart"></i> Like
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if is_paginated %}
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">First</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            {% else %}
+            <div class="card">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-search fa-5x" style="color: #ccc; margin-bottom: 20px;"></i>
+                    <h5>No profiles found</h5>
+                    <p>Try adjusting your filters</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

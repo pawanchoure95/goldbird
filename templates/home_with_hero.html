@@ -1,0 +1,38 @@
+<!-- Premium Matrimonial Website Homepage with Hero Section -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Find Your 90s Love {% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/hero.css' %}?v=20260225-1">
+{% endblock %}
+
+{% block content %}
+
+{% include 'hero.html' %}
+
+<!-- Additional Content Section (Optional) -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 text-center mb-4">
+                <i class="fas fa-heart fa-3x text-danger mb-3"></i>
+                <h3>Verified Profiles</h3>
+                <p>100% genuine and verified members for your safety and peace of mind.</p>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+                <i class="fas fa-lock fa-3x text-primary mb-3"></i>
+                <h3>Complete Privacy</h3>
+                <p>Your privacy is our priority. Control who sees your profile completely.</p>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+                <i class="fas fa-star fa-3x text-warning mb-3"></i>
+                <h3>Premium Matches</h3>
+                <p>AI-powered matching algorithm ensures compatible connections.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

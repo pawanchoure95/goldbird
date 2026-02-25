@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Hero Section - Matrimonial Website Demo</title>
+    
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* ================================================================
+           PREMIUM HERO SECTION - Matrimonial Website
+           ================================================================ */
+
+        /* Hero Section Container */
+        .hero-section {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Hero Background Image */
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1400&h=900&fit=crop&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-color: #663399;
+            z-index: 1;
+            filter: brightness(1) contrast(1.05);
+        }
+
+        /* Dark Overlay for Text Readability */
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                180deg,
+                rgba(0, 0, 0, 0.35) 0%,
+                rgba(0, 0, 0, 0.45) 50%,
+                rgba(0, 0, 0, 0.50) 100%
+            );
+            z-index: 2;
+        }
+
+        /* Hero Content - Text Container */
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Main Heading */
+        .hero-heading {
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+            text-shadow: 2px 4px 8px rgba(0, 0, 0, 0.3);
+            letter-spacing: -1px;
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        /* Subheading */
+        .hero-subheading {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.95);
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            font-weight: 300;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        /* Button Container */
+        .hero-button-container {
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        /* Button Container */
+        .hero-button-container {
+            animation: fadeIn 1s ease-out 0.3s both;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Premium CTA Button Base */
+        .btn-premium {
+            display: inline-block;
+            padding: 20px 55px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        /* Primary Button - Gold */
+        .btn-primary-hero {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #1a1a1a;
+            border-color: #ffd700;
+            box-shadow: 0 12px 35px rgba(255, 215, 0, 0.35);
+        }
+
+        .btn-primary-hero:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 50px rgba(255, 215, 0, 0.5);
+            background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%);
+        }
+
+        .btn-primary-hero:active {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.4);
+        }
+
+        /* Secondary Button - Transparent White */
+        .btn-secondary-hero {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-secondary-hero:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 16px 40px rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-secondary-hero:active {
+            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Button Active/Click Effect */
+        .btn-premium:active {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        /* Button Shimmer Effect on Hover */
+        .btn-primary-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        .btn-primary-hero:hover::before {
+            left: 100%;
+            animation: shimmer 0.5s;
+        }
+
+        .btn-secondary-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        .btn-secondary-hero:hover::before {
+            left: 100%;
+            animation: shimmer 0.5s;
+        }
+
+        /* Animations */
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* ================================================================
+           RESPONSIVE DESIGN - Tablet & Medium Devices
+           ================================================================ */
+
+        @media (max-width: 1024px) {
+            .hero-section {
+                min-height: 500px;
+                height: auto;
+                padding: 80px 0;
+            }
+
+            .hero-heading {
+                font-size: 3.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .hero-subheading {
+                font-size: 1.2rem;
+                margin-bottom: 2.5rem;
+            }
+
+            .btn-premium {
+                padding: 16px 45px;
+                font-size: 1rem;
+            }
+
+            .hero-button-container {
+                gap: 15px;
+            }
+        }
+
+        /* ================================================================
+           RESPONSIVE DESIGN - Mobile Devices
+           ================================================================ */
+
+        @media (max-width: 768px) {
+            .hero-section {
+                min-height: 450px;
+                height: auto;
+                padding: 60px 0;
+            }
+
+            .hero-background {
+                background-attachment: scroll;
+            }
+
+            .hero-heading {
+                font-size: 2.5rem;
+                margin-bottom: 1.2rem;
+                line-height: 1.3;
+            }
+
+            .hero-subheading {
+                font-size: 1rem;
+                line-height: 1.6;
+                margin-bottom: 2rem;
+                padding: 0 15px;
+            }
+
+            .btn-premium {
+                padding: 14px 40px;
+                font-size: 0.95rem;
+                border-radius: 40px;
+            }
+
+            .hero-button-container {
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-section {
+                min-height: 400px;
+                padding: 50px 0;
+            }
+
+            .hero-overlay {
+                background: linear-gradient(
+                    135deg,
+                    rgba(0, 0, 0, 0.5) 0%,
+                    rgba(0, 0, 0, 0.6) 50%,
+                    rgba(0, 0, 0, 0.5) 100%
+                );
+            }
+
+            .hero-heading {
+                font-size: 2rem;
+                margin-bottom: 1rem;
+            }
+
+            .hero-subheading {
+                font-size: 0.95rem;
+                margin-bottom: 1.8rem;
+                padding: 0 12px;
+            }
+
+            .btn-premium {
+                padding: 13px 35px;
+                font-size: 0.9rem;
+            }
+
+            .hero-button-container {
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+                padding: 0 15px;
+                box-sizing: border-box;
+            }
+
+            .btn-premium {
+                width: 100%;
+                max-width: 280px;
+            }
+        }
+
+        /* ================================================================
+           ACCESSIBILITY & EXTRA POLISH
+           ================================================================ */
+
+        /* Focus state for keyboard navigation */
+        .btn-primary-hero:focus {
+            outline: 3px solid rgba(255, 215, 0, 0.6);
+            outline-offset: 2px;
+        }
+
+        .btn-secondary-hero:focus {
+            outline: 3px solid rgba(255, 255, 255, 0.6);
+            outline-offset: 2px;
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            .hero-heading,
+            .hero-subheading,
+            .hero-button-container,
+            .btn-premium {
+                animation: none;
+            }
+
+            .btn-premium {
+                transition: color 0.01s, background-color 0.01s;
+            }
+        }
+
+        /* Additional Page Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .features-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 40px 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #ffd700;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.15);
+        }
+
+        .feature-card i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        footer {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 40px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- PREMIUM HERO SECTION -->
+    <section class="hero-section">
+        <!-- Background Image with Dark Overlay -->
+        <div class="hero-background"></div>
+        <div class="hero-overlay"></div>
+        
+        <!-- Hero Content -->
+        <div class="hero-content">
+            <div class="container h-100 d-flex align-items-center">
+                <div class="row w-100 justify-content-center">
+                    <div class="col-lg-8 col-md-10 text-center">
+                        <!-- Main Heading -->
+                        <h1 class="hero-heading">
+                            Where Elite Hearts Meet
+                        </h1>
+                        
+                        <!-- Subheading -->
+                        <p class="hero-subheading">
+                            Discover meaningful connections with carefully matched partners. Join thousands of successful families who found their perfect match on our premium platform.
+                        </p>
+                        
+                        <!-- CTA Buttons -->
+                        <div class="hero-button-container">
+                            <a href="#features" class="btn-premium btn-primary-hero">Get Started</a>
+                            <a href="#features" class="btn-premium btn-secondary-hero">Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END HERO SECTION -->
+
+    <!-- Features Section -->
+    <section class="features-section" id="features">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 style="font-size: 2.5rem; font-weight: 800; color: #333; margin-bottom: 20px;">
+                    Why Choose Us?
+                </h2>
+                <p style="font-size: 1.1rem; color: #666; max-width: 600px; margin: 0 auto;">
+                    Experience premium matrimonial services designed for meaningful relationships
+                </p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <i class="fas fa-heart" style="color: #ff6b6b;"></i>
+                        <h3>Verified Profiles</h3>
+                        <p>100% genuine and verified members for your safety and peace of mind.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <i class="fas fa-lock" style="color: #4ecdc4;"></i>
+                        <h3>Complete Privacy</h3>
+                        <p>Your privacy is our priority. Control who sees your profile completely.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card">
+                        <i class="fas fa-star" style="color: #ffd700;"></i>
+                        <h3>Premium Matches</h3>
+                        <p>AI-powered matching algorithm ensures compatible connections.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Elite Matrimonial Platform. All rights reserved.</p>
+            <p style="margin-top: 10px; font-size: 0.9rem; color: #999;">
+                Premium hero section - Production ready design
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Font Awesome for Icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</body>
+</html>
