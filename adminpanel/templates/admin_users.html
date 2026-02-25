@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% block title %}User Management - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-10">
+            <h2 class="mb-4"><i class="fas fa-users"></i> User Management</h2>
+        </div>
+        <div class="col-md-2 text-end">
+            <a href="{% url 'admin_logout' %}" class="btn btn-danger btn-sm">Logout</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Gender</th>
+                            <th>Age</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Joined</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for profile in profiles %}
+                        <tr>
+                            <td>{{ profile.user.first_name }} {{ profile.user.last_name }}</td>
+                            <td>{{ profile.user.email }}</td>
+                            <td>{{ profile.get_gender_display }}</td>
+                            <td>{{ profile.age }}</td>
+                            <td>{{ profile.location }}</td>
+                            <td>
+                                {% if profile.is_active %}
+                                <span class="badge bg-success">Active</span>
+                                {% else %}
+                                <span class="badge bg-danger">Inactive</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ profile.date_created|date:"M d, Y" }}</td>
+                            <td>
+                                <a href="{% url 'admin_user_detail' profile.user.id %}" class="btn btn-sm btn-info">View</a>
+                                <button class="btn btn-sm btn-warning toggle-btn" data-user-id="{{ profile.user.id }}">
+                                    {% if profile.is_active %}Deactivate{% else %}Activate{% endif %}
+                                </button>
+                                <button class="btn btn-sm btn-danger delete-btn" data-user-id="{{ profile.user.id }}">Delete</button>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center py-4">No users found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-4">
+        <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+</div>
+
+{% csrf_token %}
+
+<script>
+function getCsrfToken() {
+    const token = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+    if (token) return token;
+    
+    // Fallback: try to get from cookie
+    const cookies = document.cookie.split('; ');
+    for (let cookie of cookies) {
+        if (cookie.startsWith('csrftoken=')) {
+            return cookie.substring(10);
+        }
+    }
+    return '';
+}
+
+document.querySelectorAll('.toggle-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const userId = this.dataset.userId;
+        const button = this;
+        button.disabled = true;
+        
+        fetch(`/adminpanel/toggle-user/${userId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCsrfToken(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                alert('User status updated successfully!');
+                location.reload();
+            } else {
+                alert('Error: ' + (data.message || 'Failed to update user'));
+                button.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error updating user: ' + error.message);
+            button.disabled = false;
+        });
+    });
+});
+
+document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+            return;
+        }
+        
+        const userId = this.dataset.userId;
+        const button = this;
+        button.disabled = true;
+        
+        fetch(`/adminpanel/delete-user/${userId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCsrfToken(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                alert('User deleted successfully!');
+                location.reload();
+            } else {
+                alert('Error: ' + (data.message || 'Failed to delete user'));
+                button.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error deleting user: ' + error.message);
+            button.disabled = false;
+        });
+    });
+});
+</script>
+{% endblock %}

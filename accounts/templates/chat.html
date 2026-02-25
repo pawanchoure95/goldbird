@@ -1,0 +1,86 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Premium Chat - Goldbird{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/chat.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="chat-shell">
+        <aside class="chat-sidebar card">
+            <div class="chat-sidebar-header">
+                <h4 class="mb-0"><i class="fas fa-comments"></i> Your Matches</h4>
+                <p class="text-muted mb-0">Chat available only for connected matches.</p>
+            </div>
+            <div class="chat-match-list" id="matchList">
+                {% if matched_users %}
+                    {% for matched in matched_users %}
+                    <a href="{{ matched.chatUrl }}" class="match-item {% if selected_user and selected_user.username == matched.username %}active{% endif %}" data-username="{{ matched.username }}">
+                        {% if matched.profilePicture %}
+                        <img src="{{ matched.profilePicture }}" alt="{{ matched.fullName }}" class="match-avatar">
+                        {% else %}
+                        <div class="match-avatar fallback"><i class="fas fa-user"></i></div>
+                        {% endif %}
+                        <div class="match-info">
+                            <div class="match-name">{{ matched.fullName }}</div>
+                            <div class="match-status" id="presence-{{ matched.id }}">Offline</div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-heart"></i>
+                        <p class="mb-0">No mutual matches yet. Like and get liked back to unlock chat.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </aside>
+
+        <section class="chat-main card">
+            {% if selected_user %}
+            <div class="chat-header">
+                <div class="chat-user">
+                    {% if selected_user.profilePicture %}
+                    <img src="{{ selected_user.profilePicture }}" alt="{{ selected_user.fullName }}" class="chat-avatar">
+                    {% else %}
+                    <div class="chat-avatar fallback"><i class="fas fa-user"></i></div>
+                    {% endif %}
+                    <div>
+                        <h5 class="mb-0">{{ selected_user.fullName }}</h5>
+                        <small id="activeStatus" class="text-muted">Offline</small>
+                    </div>
+                </div>
+                <a href="{{ selected_user.profileUrl }}" class="btn btn-secondary">View Profile</a>
+            </div>
+
+            <div id="messageList" class="message-list"></div>
+            <div id="typingIndicator" class="typing-indicator">Typing...</div>
+
+            <form id="chatForm" class="chat-input-bar" autocomplete="off">
+                <input type="text" id="messageInput" class="form-control" maxlength="500" placeholder="Write a respectful message...">
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+            {% else %}
+            <div class="empty-chat-main">
+                <i class="fas fa-comment-dots"></i>
+                <h4>Start a Conversation</h4>
+                <p class="mb-0">Select a match from left panel to begin premium chat.</p>
+            </div>
+            {% endif %}
+        </section>
+    </div>
+</div>
+
+{{ chat_bootstrap|json_script:"chat-bootstrap" }}
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script src="{% static 'js/chat.js' %}"></script>
+{% endblock %}
+

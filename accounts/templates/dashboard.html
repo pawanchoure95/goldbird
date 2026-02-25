@@ -1,0 +1,123 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Dashboard - Goldbird{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <h2 class="mb-4">Welcome, {{ user.first_name }}!</h2>
+    
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="stats-box">
+                <i class="fas fa-heart fa-3x" style="color: var(--primary-color);"></i>
+                <div class="stats-number">{{ likes_received }}</div>
+                <div class="stats-label">Likes Received</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="stats-box">
+                <i class="fas fa-user-check fa-3x" style="color: var(--primary-color);"></i>
+                <div class="stats-number">{{ matched_count }}</div>
+                <div class="stats-label">Matches</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="stats-box">
+                <i class="fas fa-user fa-3x" style="color: var(--primary-color);"></i>
+                <div class="stats-number">{{ profile.gender }}</div>
+                <div class="stats-label">Gender</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="stats-box">
+                <i class="fas fa-birthday-cake fa-3x" style="color: var(--primary-color);"></i>
+                <div class="stats-number">{{ profile.age }}</div>
+                <div class="stats-label">Age</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body p-4">
+                    <h5 class="card-title"><i class="fas fa-user-edit"></i> Profile Completion</h5>
+                    <p class="card-text">Complete your profile to increase your chances of finding a match.</p>
+                    {% if profile.bio and profile.phone and profile.age and profile.location %}
+                    <span class="badge bg-success">90% Complete</span>
+                    {% elif profile.age and profile.location %}
+                    <span class="badge bg-warning">60% Complete</span>
+                    {% else %}
+                    <span class="badge bg-danger">40% Complete</span>
+                    {% endif %}
+                    <br><br>
+                    <a href="{% url 'profile_edit' %}" class="btn btn-primary">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body p-4">
+                    <h5 class="card-title"><i class="fas fa-search"></i> Find Matches</h5>
+                    <p class="card-text">Start browsing profiles and find your perfect match.</p>
+                    <a href="{% url 'search' %}" class="btn btn-primary">Search Profiles</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body p-4">
+                    <h5 class="card-title"><i class="fas fa-comments"></i> Premium Chat</h5>
+                    <p class="card-text">Chat in real-time with users where both of you liked each other.</p>
+                    <a href="{% url 'chat_home' %}" class="btn btn-primary">Open Chat</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if profile.profile_picture %}
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center p-4">
+                    <img src="{{ profile.profile_picture.url }}" alt="Profile" class="profile-image" style="width: 200px; height: 200px;">
+                    <h5 class="mt-3">{{ user.first_name }} {{ user.last_name }}</h5>
+                    <p class="text-muted">{{ profile.age }} years old</p>
+                    <p class="text-muted">{{ profile.location }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body p-4">
+                    <h5 class="card-title">About You</h5>
+                    <p>{{ profile.bio }}</p>
+                    <ul class="list-unstyled">
+                        <li><strong>Religion:</strong> {{ profile.get_religion_display }}</li>
+                        <li><strong>Marital Status:</strong> {{ profile.get_marital_status_display }}</li>
+                        <li><strong>Occupation:</strong> {{ profile.occupation }}</li>
+                        <li><strong>Education:</strong> {{ profile.education }}</li>
+                        <li><strong>Height:</strong> {{ profile.height }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body text-center p-4">
+                    <i class="fas fa-image fa-5x" style="color: #ccc; margin-bottom: 20px;"></i>
+                    <h5>Complete Your Profile</h5>
+                    <p>Add a profile picture and fill in your details to get started.</p>
+                    <a href="{% url 'profile_edit' %}" class="btn btn-primary">Upload Picture & Complete Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
