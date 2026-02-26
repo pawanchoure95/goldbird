@@ -383,6 +383,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#support">Support</a>
+                    </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'search' %}">Search</a>
@@ -437,9 +440,10 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="footer">
+    <footer class="footer" id="support">
         <div class="container">
             <p>&copy; 2026 Goldbird. All rights reserved. | Connecting hearts, building futures.</p>
+            <p>Support: Pawan Choure | 7898944334 | Sundisk95@gmail.com | Trail Version</p>
         </div>
     </footer>
 
