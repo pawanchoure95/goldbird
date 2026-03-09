@@ -76,11 +76,13 @@ def admin_users(request):
         if request.user.is_authenticated:
             return redirect('home')
         return redirect('admin_login')
-    
-    users = User.objects.all()
-    profiles = Profile.objects.all()
-    
-    # Create a dictionary mapping user IDs to profiles for easier access
+
+    users = User.objects.all().order_by('-date_joined')
+    # Keep admin panel stable even if some old users were created before Profile rows existed.
+    for user in users:
+        Profile.objects.get_or_create(user=user)
+    profiles = Profile.objects.select_related('user').all().order_by('-date_created')
+
     profile_dict = {p.user_id: p for p in profiles}
     
     context = {
@@ -102,7 +104,7 @@ def admin_toggle_user_status(request, user_id):
     
     try:
         user = get_object_or_404(User, id=user_id)
-        profile = get_object_or_404(Profile, user=user)
+        profile, _ = Profile.objects.get_or_create(user=user)
         profile.is_active = not profile.is_active
         profile.save()
 
@@ -146,7 +148,7 @@ def admin_deactivate_user(request, user_id):
 
     try:
         user = get_object_or_404(User, id=user_id)
-        profile = get_object_or_404(Profile, user=user)
+        profile, _ = Profile.objects.get_or_create(user=user)
         profile.is_active = False
         profile.save(update_fields=['is_active'])
         user.is_active = False
@@ -167,7 +169,7 @@ def admin_view_user(request, user_id):
         return redirect('admin_login')
     
     user = get_object_or_404(User, id=user_id)
-    profile = get_object_or_404(Profile, user=user)
+    profile, _ = Profile.objects.get_or_create(user=user)
     
     context = {
         'user': user,
