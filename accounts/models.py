@@ -61,3 +61,17 @@ class Like(models.Model):
     
     def __str__(self):
         return f"{self.from_user.username} likes {self.to_user.username}"
+
+
+class ChatMessage(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messages_sent')
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='messages_received')
+    room_id = models.CharField(max_length=64, db_index=True)
+    message = models.TextField(max_length=500)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return f"{self.sender.username} -> {self.recipient.username}"

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -7,13 +8,24 @@ from django.urls import reverse
 from django.db.models import Q
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse, HttpResponseForbidden
-from .models import Profile, Like
+from .models import Profile, Like, ChatMessage
 from .forms import UserRegistrationForm, UserLoginForm, ProfileForm, SearchForm
 from .firebase_utils import (
     firebase_web_config,
     firebase_is_configured,
     create_firebase_custom_token,
 )
+
+def home(request):
+    if request.user.is_authenticated:
+        profile, _ = Profile.objects.get_or_create(user=request.user)
+        context = {
+            "profile": profile,
+            "likes_received": Like.objects.filter(to_user=request.user).count(),
+            "matched_count": len(_matched_user_ids(request.user)),
+        }
+        return render(request, "home_logged_in.html", context)
+    return render(request, "home_with_hero.html")
 
 
 def _matched_user_ids(user):
@@ -25,6 +37,14 @@ def _matched_user_ids(user):
 def _chat_room_id(user_a_id, user_b_id):
     uid1, uid2 = sorted([int(user_a_id), int(user_b_id)])
     return f"{uid1}_{uid2}"
+
+
+def _can_chat(user_a, user_b):
+    if not user_a or not user_b or user_a == user_b:
+        return False
+    return Like.objects.filter(from_user=user_a, to_user=user_b).exists() and Like.objects.filter(
+        from_user=user_b, to_user=user_a
+    ).exists()
 
 
 def _profile_image_url(profile, request):
@@ -76,19 +96,34 @@ def register(request):
 
 
 def user_login(request):
+    if request.session.get('admin_logged_in'):
+        return redirect('admin_dashboard')
+
     if request.user.is_authenticated:
         return redirect('dashboard')
     
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data['email']
+            email = (form.cleaned_data['email'] or '').strip()
             password = form.cleaned_data['password']
+            admin_email = (settings.ADMIN_PANEL_EMAIL or '').strip().lower()
+            admin_password = settings.ADMIN_PANEL_PASSWORD or ''
+
+            if email.lower() == admin_email and password == admin_password:
+                request.session['admin_logged_in'] = True
+                request.session['admin_email'] = settings.ADMIN_PANEL_EMAIL
+                return redirect('admin_dashboard')
+
             try:
-                user = User.objects.get(email=email)
-                user = authenticate(request, username=user.username, password=password)
-                if user is not None:
-                    login(request, user)
+                db_user = User.objects.get(email__iexact=email)
+                if not db_user.is_active:
+                    form.add_error(None, 'Your account is inactive. Please contact support.')
+                    return render(request, 'login.html', {'form': form})
+
+                auth_user = authenticate(request, username=db_user.username, password=password)
+                if auth_user is not None:
+                    login(request, auth_user)
                     return redirect('dashboard')
                 else:
                     form.add_error(None, 'Invalid credentials')
@@ -166,7 +201,7 @@ def profile_view(request, username):
 
 @login_required(login_url='login')
 def search_users(request):
-    profiles = Profile.objects.filter(is_active=True).exclude(user=request.user)
+    profiles = Profile.objects.filter(is_active=True, user__is_active=True).exclude(user=request.user)
     form = SearchForm(request.GET)
     
     if form.is_valid():
@@ -189,6 +224,7 @@ def search_users(request):
         'profiles': profiles,
         'form': form,
         'matched_user_ids': set(_matched_user_ids(request.user)),
+        'liked_user_ids': set(Like.objects.filter(from_user=request.user).values_list('to_user_id', flat=True)),
     }
     
     return render(request, 'search.html', context)
@@ -224,6 +260,7 @@ def chat_home(request):
         "matches": matched_users,
         "selectedUser": selected_user,
         "tokenEndpoint": reverse("chat_firebase_token"),
+        "fallbackMessageEndpoint": reverse("chat_messages_api", args=[selected_user["username"]]) if selected_user else "",
     }
 
     return render(
@@ -261,6 +298,45 @@ def chat_firebase_token(request):
 
 
 @login_required(login_url='login')
+def chat_messages_api(request, username):
+    peer = get_object_or_404(User, username__iexact=username)
+    if not _can_chat(request.user, peer):
+        return JsonResponse({"ok": False, "message": "You can only chat with matched users."}, status=403)
+
+    room_id = _chat_room_id(request.user.id, peer.id)
+    if request.method == "GET":
+        messages = (
+            ChatMessage.objects.filter(room_id=room_id)
+            .select_related("sender")
+            .order_by("-created_at")[:100]
+        )
+        payload = [
+            {
+                "senderUid": str(msg.sender_id),
+                "senderName": msg.sender.first_name or msg.sender.username,
+                "text": msg.message,
+                "createdAt": msg.created_at.isoformat(),
+            }
+            for msg in reversed(messages)
+        ]
+        return JsonResponse({"ok": True, "messages": payload})
+
+    if request.method == "POST":
+        text = (request.POST.get("message") or "").strip()
+        if not text:
+            return JsonResponse({"ok": False, "message": "Message cannot be empty."}, status=400)
+        ChatMessage.objects.create(
+            sender=request.user,
+            recipient=peer,
+            room_id=room_id,
+            message=text[:500],
+        )
+        return JsonResponse({"ok": True})
+
+    return JsonResponse({"ok": False, "message": "Method not allowed."}, status=405)
+
+
+@login_required(login_url='login')
 @require_POST
 def like_user(request, username):
     wants_json = (
@@ -291,5 +367,11 @@ def like_user(request, username):
         return redirect(fallback_redirect)
     
     if wants_json:
-        return JsonResponse({'status': 'success', 'action': 'liked'})
+        return JsonResponse(
+            {
+                'status': 'success',
+                'action': 'liked',
+                'is_matched': Like.objects.filter(from_user=to_user, to_user=request.user).exists(),
+            }
+        )
     return redirect(fallback_redirect)

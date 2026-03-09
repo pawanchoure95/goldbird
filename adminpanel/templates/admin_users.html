@@ -47,10 +47,20 @@
                             <td>{{ profile.date_created|date:"M d, Y" }}</td>
                             <td>
                                 <a href="{% url 'admin_user_detail' profile.user.id %}" class="btn btn-sm btn-info">View</a>
-                                <button class="btn btn-sm btn-warning toggle-btn" data-user-id="{{ profile.user.id }}">
-                                    {% if profile.is_active %}Deactivate{% else %}Activate{% endif %}
-                                </button>
-                                <button class="btn btn-sm btn-danger delete-btn" data-user-id="{{ profile.user.id }}">Delete</button>
+                                <form method="post" action="{% url 'admin_toggle_user' profile.user.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-warning">
+                                        {% if profile.is_active %}Deactivate{% else %}Activate{% endif %}
+                                    </button>
+                                </form>
+                                <form method="post" action="{% url 'admin_deactivate_user' profile.user.id %}" style="display:inline;" onsubmit="return confirm('Are you sure you want to deactivate this user? They will not appear in search.');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-secondary">Disable</button>
+                                </form>
+                                <form method="post" action="{% url 'admin_delete_user' profile.user.id %}" style="display:inline;" onsubmit="return confirm('Delete this user permanently? This action cannot be undone.');">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
                             </td>
                         </tr>
                         {% empty %}
@@ -68,96 +78,4 @@
         <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
     </div>
 </div>
-
-{% csrf_token %}
-
-<script>
-function getCsrfToken() {
-    const token = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
-    if (token) return token;
-    
-    // Fallback: try to get from cookie
-    const cookies = document.cookie.split('; ');
-    for (let cookie of cookies) {
-        if (cookie.startsWith('csrftoken=')) {
-            return cookie.substring(10);
-        }
-    }
-    return '';
-}
-
-document.querySelectorAll('.toggle-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const userId = this.dataset.userId;
-        const button = this;
-        button.disabled = true;
-        
-        fetch(`/adminpanel/toggle-user/${userId}/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': getCsrfToken(),
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({})
-        })
-        .then(response => {
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return response.json();
-        })
-        .then(data => {
-            if (data.status === 'success') {
-                alert('User status updated successfully!');
-                location.reload();
-            } else {
-                alert('Error: ' + (data.message || 'Failed to update user'));
-                button.disabled = false;
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error updating user: ' + error.message);
-            button.disabled = false;
-        });
-    });
-});
-
-document.querySelectorAll('.delete-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
-            return;
-        }
-        
-        const userId = this.dataset.userId;
-        const button = this;
-        button.disabled = true;
-        
-        fetch(`/adminpanel/delete-user/${userId}/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': getCsrfToken(),
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({})
-        })
-        .then(response => {
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            return response.json();
-        })
-        .then(data => {
-            if (data.status === 'success') {
-                alert('User deleted successfully!');
-                location.reload();
-            } else {
-                alert('Error: ' + (data.message || 'Failed to delete user'));
-                button.disabled = false;
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error deleting user: ' + error.message);
-            button.disabled = false;
-        });
-    });
-});
-</script>
 {% endblock %}

@@ -13,16 +13,14 @@
   const form = document.getElementById("chatForm");
   const input = document.getElementById("messageInput");
   const activeStatus = document.getElementById("activeStatus");
-
-  if (!firebaseEnabled) {
-    showSystemMessage(
-      "Chat is configured in UI but Firebase is not enabled on server. Follow setup steps to activate real-time chat."
-    );
-    if (form) form.style.display = "none";
-    return;
-  }
+  const fallbackEndpoint = data.fallbackMessageEndpoint || "";
 
   if (!selectedUser || !messageList || !form || !input) return;
+
+  if (!firebaseEnabled) {
+    startFallbackChat();
+    return;
+  }
 
   const allowedRoomIds = new Set(matches.map((m) => m.roomId));
   const roomId = selectedUser.roomId;
@@ -223,7 +221,7 @@
 
   function formatTimestamp(ts) {
     try {
-      const date = ts && ts.toDate ? ts.toDate() : new Date();
+      const date = ts && ts.toDate ? ts.toDate() : ts ? new Date(ts) : new Date();
       return new Intl.DateTimeFormat("en-IN", {
         hour: "numeric",
         minute: "2-digit",
@@ -251,5 +249,71 @@
     wrap.innerHTML = `<p>${text}</p>`;
     messageList.innerHTML = "";
     messageList.appendChild(wrap);
+  }
+
+  function startFallbackChat() {
+    if (!fallbackEndpoint) {
+      showSystemMessage("Chat endpoint unavailable.");
+      form.style.display = "none";
+      return;
+    }
+
+    if (activeStatus) activeStatus.textContent = "Online";
+    let lastSerialized = "";
+
+    const loadMessages = () =>
+      fetch(fallbackEndpoint, {
+        method: "GET",
+        credentials: "same-origin",
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+      })
+        .then((res) => res.json())
+        .then((payload) => {
+          if (!payload.ok) throw new Error(payload.message || "Unable to load chat.");
+          const serialized = JSON.stringify(payload.messages || []);
+          if (serialized === lastSerialized) return;
+          lastSerialized = serialized;
+          messageList.innerHTML = "";
+          (payload.messages || []).forEach((msg) => renderMessage(msg));
+          scrollToBottom();
+        })
+        .catch((err) => showSystemMessage(err.message || "Chat unavailable right now."));
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const text = sanitize(input.value);
+      if (!text) return;
+      const body = new URLSearchParams();
+      body.append("message", text);
+
+      fetch(fallbackEndpoint, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "X-CSRFToken": readCsrfToken(),
+          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+          "X-Requested-With": "XMLHttpRequest",
+        },
+        body: body.toString(),
+      })
+        .then((res) => res.json())
+        .then((payload) => {
+          if (!payload.ok) throw new Error(payload.message || "Message send failed.");
+          input.value = "";
+          return loadMessages();
+        })
+        .catch((err) => showSystemMessage(err.message || "Message send failed."));
+    });
+
+    loadMessages();
+    setInterval(loadMessages, 3000);
+  }
+
+  function readCsrfToken() {
+    const formToken = document.querySelector("[name=csrfmiddlewaretoken]");
+    if (formToken) return formToken.value;
+
+    const cookie = document.cookie.split("; ").find((row) => row.startsWith("csrftoken="));
+    return cookie ? cookie.split("=")[1] : "";
   }
 })();

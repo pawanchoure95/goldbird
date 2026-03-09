@@ -27,9 +27,13 @@
                     </form>
                 </div>
                 
-                <form method="post" action="{% url 'admin_delete_user' profile.user.id %}" onsubmit="return confirm('Are you sure?');">
+                <form method="post" action="{% url 'admin_deactivate_user' profile.user.id %}" onsubmit="return confirm('Deactivate this user account?');">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger w-100">Delete User</button>
+                    <button type="submit" class="btn btn-danger w-100">Deactivate User</button>
+                </form>
+                <form method="post" action="{% url 'admin_delete_user' profile.user.id %}" onsubmit="return confirm('Delete this user permanently?');" class="mt-2">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-dark w-100">Delete Permanently</button>
                 </form>
             </div>
         </div>

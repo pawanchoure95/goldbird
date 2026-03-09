@@ -13,5 +13,6 @@ urlpatterns = [
     path('chat/', views.chat_home, name='chat_home'),
     path('chat/<str:username>/', views.chat_room, name='chat_room'),
     path('chat-api/token/', views.chat_firebase_token, name='chat_firebase_token'),
+    path('chat-api/messages/<str:username>/', views.chat_messages_api, name='chat_messages_api'),
     path('like/<str:username>/', views.like_user, name='like_user'),
 ]

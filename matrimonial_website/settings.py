@@ -111,6 +111,8 @@ LOGOUT_REDIRECT_URL = 'home'
 
 SESSION_EMAIL = 'admin@matrimonial.com'
 SESSION_PASSWORD = 'admin123'
+ADMIN_PANEL_EMAIL = os.getenv('ADMIN_PANEL_EMAIL', 'Sundisk95@gmail.com')
+ADMIN_PANEL_PASSWORD = os.getenv('ADMIN_PANEL_PASSWORD', 'Sneha11@')
 
 # Firebase chat configuration
 FIREBASE_CHAT_ENABLED = os.getenv('FIREBASE_CHAT_ENABLED', 'False') == 'True'

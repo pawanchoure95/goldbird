@@ -75,8 +75,8 @@
                             {% endif %}
                             <form method="post" action="{% url 'like_user' profile.user.username %}" style="display: inline; width: 100%;">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-sm like-btn w-100">
-                                    <i class="fas fa-heart"></i> Like
+                                <button type="submit" class="btn btn-sm like-btn {% if profile.user.id in liked_user_ids %}liked{% endif %} w-100">
+                                    <i class="fas fa-heart"></i> {% if profile.user.id in liked_user_ids %}Liked{% else %}Like{% endif %}
                                 </button>
                             </form>
                         </div>

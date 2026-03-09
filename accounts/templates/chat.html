@@ -60,6 +60,7 @@
             <div id="typingIndicator" class="typing-indicator">Typing...</div>
 
             <form id="chatForm" class="chat-input-bar" autocomplete="off">
+                {% csrf_token %}
                 <input type="text" id="messageInput" class="form-control" maxlength="500" placeholder="Write a respectful message...">
                 <button type="submit" class="btn btn-primary">Send</button>
             </form>
@@ -78,9 +79,111 @@
 {% endblock %}
 
 {% block extra_js %}
+{% if not firebase_enabled %}
+<script>
+(function () {
+    const bootstrapNode = document.getElementById("chat-bootstrap");
+    if (!bootstrapNode) return;
+
+    const data = JSON.parse(bootstrapNode.textContent || "{}");
+    const endpoint = data.fallbackMessageEndpoint || "";
+    const selectedUser = data.selectedUser;
+    const currentUser = data.currentUser || {};
+    const form = document.getElementById("chatForm");
+    const input = document.getElementById("messageInput");
+    const messageList = document.getElementById("messageList");
+    const activeStatus = document.getElementById("activeStatus");
+
+    if (!endpoint || !selectedUser || !form || !input || !messageList) {
+        return;
+    }
+
+    if (activeStatus) activeStatus.textContent = "Online";
+
+    function readCsrfToken() {
+        const formToken = document.querySelector("[name=csrfmiddlewaretoken]");
+        if (formToken) return formToken.value;
+        const cookie = document.cookie.split("; ").find((row) => row.startsWith("csrftoken="));
+        return cookie ? cookie.split("=")[1] : "";
+    }
+
+    function renderMessage(msg) {
+        const isSelf = String(msg.senderUid) === String(currentUser.uid);
+        const row = document.createElement("div");
+        row.className = "message-row " + (isSelf ? "self" : "other");
+
+        const bubble = document.createElement("div");
+        bubble.className = "message-bubble";
+
+        const body = document.createElement("div");
+        body.textContent = msg.text || "";
+
+        const meta = document.createElement("div");
+        meta.className = "message-meta";
+        meta.innerHTML = "<span>" + (isSelf ? "You" : selectedUser.fullName) + "</span>";
+
+        bubble.appendChild(body);
+        bubble.appendChild(meta);
+        row.appendChild(bubble);
+        messageList.appendChild(row);
+    }
+
+    function loadMessages() {
+        fetch(endpoint, {
+            method: "GET",
+            credentials: "same-origin",
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+        })
+        .then((res) => res.json())
+        .then((payload) => {
+            if (!payload.ok) throw new Error(payload.message || "Unable to load chat.");
+            messageList.innerHTML = "";
+            (payload.messages || []).forEach(renderMessage);
+            messageList.scrollTop = messageList.scrollHeight;
+        })
+        .catch((err) => {
+            messageList.innerHTML = '<div class="empty-chat-main"><p>' + (err.message || "Chat unavailable") + '</p></div>';
+        });
+    }
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const text = (input.value || "").trim();
+        if (!text) return;
+
+        const body = new URLSearchParams();
+        body.append("message", text.slice(0, 500));
+
+        fetch(endpoint, {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+                "X-CSRFToken": readCsrfToken(),
+                "X-Requested-With": "XMLHttpRequest",
+                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+            },
+            body: body.toString(),
+        })
+        .then((res) => res.json())
+        .then((payload) => {
+            if (!payload.ok) throw new Error(payload.message || "Message send failed.");
+            input.value = "";
+            loadMessages();
+        })
+        .catch((err) => {
+            alert(err.message || "Message send failed.");
+        });
+    });
+
+    loadMessages();
+    setInterval(loadMessages, 3000);
+})();
+</script>
+{% else %}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-<script src="{% static 'js/chat.js' %}"></script>
+<script src="{% static 'js/chat.js' %}?v=20260309-2"></script>
+{% endif %}
 {% endblock %}
 

@@ -30,6 +30,7 @@
             --bg-admin-dashboard: url('{% static "images/page-bg/admin-dashboard.jpg" %}?v=20260224-2');
             --bg-admin-users: url('{% static "images/page-bg/admin-users.jpg" %}?v=20260224-2');
             --bg-admin-user-detail: url('{% static "images/page-bg/admin-user-detail.jpg" %}?v=20260224-2');
+            --bg-chat: url('{% static "images/page-bg/home-hero.jpg" %}?v=20260224-3');
             --bg-default: url('{% static "images/page-bg/default.jpg" %}?v=20260224-2');
         }
         
@@ -97,6 +98,10 @@
 
         body.page-admin_user_detail {
             --page-bg-image: var(--bg-admin-user-detail);
+        }
+
+        body.page-chat_home {
+            --page-bg-image: var(--bg-chat);
         }
 
         .page-with-bg .card,
@@ -399,13 +404,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'profile' %}">My Profile</a>
                     </li>
+                    {% if request.session.admin_logged_in %}
                     <li class="nav-item">
-                        {% if request.session.admin_logged_in %}
                         <a class="nav-link" href="{% url 'admin_dashboard' %}">Admin</a>
-                        {% else %}
-                        <a class="nav-link" href="{% url 'admin_login' %}">Admin</a>
-                        {% endif %}
                     </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Logout ({{ user.username }})</a>
                     </li>
@@ -415,9 +418,6 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'admin_login' %}">Admin</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -452,8 +452,6 @@
     {% block extra_js %}{% endblock %}
 </body>
 </html>
-
-
 
 
 

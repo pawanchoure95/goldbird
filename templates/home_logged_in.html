@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Welcome Back - Goldbird{% endblock %}
+
+{% block extra_css %}
+<style>
+    .welcome-wrap {
+        min-height: calc(100vh - 220px);
+        display: grid;
+        place-items: center;
+        padding: 36px 0;
+    }
+
+    .welcome-card {
+        width: min(980px, 96%);
+        background: rgba(12, 20, 28, 0.68);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 22px;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(4px);
+        color: #fff;
+        padding: 32px;
+    }
+
+    .welcome-title {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .welcome-sub {
+        color: rgba(255, 255, 255, 0.86);
+        font-size: 1.1rem;
+        margin-bottom: 22px;
+    }
+
+    .welcome-stats {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(3, minmax(140px, 1fr));
+        margin-bottom: 26px;
+    }
+
+    .welcome-stat {
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 14px;
+        padding: 14px;
+        text-align: center;
+    }
+
+    .welcome-stat .num {
+        font-size: 1.7rem;
+        font-weight: 800;
+        line-height: 1;
+        margin-bottom: 6px;
+    }
+
+    .welcome-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .welcome-actions .btn {
+        border-radius: 999px;
+        padding-inline: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .welcome-stats {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="welcome-wrap">
+    <div class="welcome-card">
+        <h1 class="welcome-title">Welcome back, {{ user.first_name|default:user.username }}</h1>
+        <p class="welcome-sub">Aaj ka next step choose karo aur direct match journey continue karo.</p>
+
+        <div class="welcome-stats">
+            <div class="welcome-stat">
+                <div class="num">{{ likes_received }}</div>
+                <div>Likes Received</div>
+            </div>
+            <div class="welcome-stat">
+                <div class="num">{{ matched_count }}</div>
+                <div>Your Matches</div>
+            </div>
+            <div class="welcome-stat">
+                <div class="num">{{ profile.age|default:"--" }}</div>
+                <div>Profile Age</div>
+            </div>
+        </div>
+
+        <div class="welcome-actions">
+            <a href="{% url 'search' %}" class="btn btn-primary">Find Matches</a>
+            <a href="{% url 'chat_home' %}" class="btn btn-primary">Open Chat</a>
+            <a href="{% url 'profile_edit' %}" class="btn btn-secondary">Update Profile</a>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">Go to Dashboard</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

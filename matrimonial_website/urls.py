@@ -2,11 +2,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.views.generic import TemplateView
+from accounts import views as account_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='home_with_hero.html'), name='home'),
+    path('', account_views.home, name='home'),
     path('accounts/', include('accounts.urls')),
     path('adminpanel/', include('adminpanel.urls')),
 ]
