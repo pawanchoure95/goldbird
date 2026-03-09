@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.urls import reverse
+from django.db import transaction
 from django.db.models import Q
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse, HttpResponseForbidden
@@ -81,10 +82,14 @@ def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            Profile.objects.create(user=user)
-            login(request, user)
-            return redirect('profile_edit')
+            try:
+                with transaction.atomic():
+                    user = form.save()
+                    Profile.objects.get_or_create(user=user)
+                login(request, user)
+                return redirect('profile_edit')
+            except Exception:
+                form.add_error(None, 'Registration failed. Please try again.')
         else:
             for field, errors in form.errors.items():
                 for error in errors:
