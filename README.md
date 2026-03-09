@@ -103,11 +103,6 @@ The application will be available at: `http://localhost:8000`
 - **Django Admin**: http://localhost:8000/admin/
 - Create superuser: `python manage.py createsuperuser`
 
-## Default Admin Credentials
-
-- **Email**: admin@matrimonial.com
-- **Password**: admin123
-
 ## Project Structure
 
 ```
